@@ -2,11 +2,14 @@
 {% load static %}
 
 {% block page_header %}
-    <div class="container header-container">
-        <div class="row">
-            <div class="col"></div>
-        </div>
+<div class="header-container">
+    <div class="centered-content">
+        <a href="{% url 'home' %}" class="main-logo-link">
+            <h2 class="logo-font">Boutique Ado</h2>
+        </a>
     </div>
+</div>
+
 {% endblock %}
 
 {% block content %}

@@ -1,6 +1,8 @@
 from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.db.models import Q
+from django.db.models.functions import Lower  # Import Lower function for case-insensitive sorting
+
 from .models import Product, Category
 
 def all_products(request):
@@ -8,7 +10,7 @@ def all_products(request):
 
     products = Product.objects.all()
     query = None
-    categories = None  # Initialize categories to avoid UnboundLocalError
+    categories = None
     sort = None
     direction = None
 
@@ -16,17 +18,19 @@ def all_products(request):
         if 'sort' in request.GET:
             sortkey = request.GET['sort']
             sort = sortkey
-            if sortkey =='name':
+            if sortkey == 'name':
+                
+                products = products.annotate(lower_name=Lower('name'))  # Annotate lowercase name
                 sortkey = 'lower_name'
-                products=products.annotate(lower_name=lower('name'))
-            if sortkey == 'category':
+            elif sortkey == 'category':
                 sortkey = 'category__name'
+
             if 'direction' in request.GET:
                 direction = request.GET['direction']
                 if direction == 'desc':
                     sortkey = f'-{sortkey}'
 
-            products = products.order_by(sortkey)
+            products = products.order_by(sortkey)  # Apply sorting
 
         if 'category' in request.GET:
             # Split category string into a list
@@ -46,7 +50,6 @@ def all_products(request):
 
     current_sorting = f'{sort}_{direction}'
 
-
     # If no categories are filtered, set it to an empty list (to avoid None issues in the template)
     if categories is None:
         categories = []
@@ -64,10 +67,10 @@ def all_products(request):
 def product_details(request, product_id):
     """ A view to show individual product details """
 
-    product = get_object_or_404(Product, pk=product_id)  # Fix to use singular get_object_or_404
+    product = get_object_or_404(Product, pk=product_id)
 
     context = {
         'product': product,
     }
-    
+
     return render(request, 'products/product_details.html', context)

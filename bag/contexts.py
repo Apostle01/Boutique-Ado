@@ -8,19 +8,32 @@ def bag_contents(request):
     bag_items = []
     total = 0
     product_count = 0
+    # item_data
+
     bag = request.session.get('bag', {})
 
     # Calculate total price and product count
-    for item_id, quantity in bag.items():
+    for item_id, item_data in bag.items():
+        if isinstance(item_data, int):
     # Assuming a get_product_by_id function or a similar method to get product info
-        product = get_object_or_404(Product, pk=item_id)
-        total += quantity * product.price
-        product_count += quantity
-        bag_items.append({
-            'item_id': item_id,
-            'quantity': quantity,
-            'product': product,
-        })
+            product = get_object_or_404(Product, pk=item_id)
+            total += item_data * product.price
+            product_count += item_data
+            bag_items.append({
+                'item_id': item_id,
+                'quantity': item_data,
+                'product': product,
+            })
+        else:
+            for size, quantity in item_data.get('items_by_size', {}).items():
+                total += quantity * product.price
+                product_count += quantity
+                bag_items.append({
+                    'item_id': item_id,
+                    'quantity': item_data,
+                    'product': product,
+                    'size': size,
+                })
 
     # Calculate delivery cost and thresholds
     if total < settings.FREE_DELIVERY_THRESHOLD:

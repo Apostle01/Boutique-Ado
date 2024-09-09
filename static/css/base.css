@@ -97,8 +97,10 @@ body {
         right: 10px;
     }
 
-    .btt-link {
-        cursor: pointer;
+    .btt-link,
+        .update-link,
+        .remove.item {
+            cursor: pointer;
     }
     
     /* --------------------------------- Media queries */

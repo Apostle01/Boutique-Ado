@@ -21,8 +21,8 @@ def all_products(request):
             if sortkey == 'name':
                 
                 products = products.annotate(lower_name=Lower('name'))  # Annotate lowercase name
-                sortkey = 'lower_name'
-            elif sortkey == 'category':
+                # sortkey = 'lower_name'
+            if sortkey == 'category':
                 sortkey = 'category__name'
 
             if 'direction' in request.GET:
@@ -34,9 +34,9 @@ def all_products(request):
 
         if 'category' in request.GET:
             # Split category string into a list
-            category_list = request.GET['category'].split(',')
-            products = products.filter(category__name__in=category_list)
-            categories = Category.objects.filter(name__in=category_list)
+            categories = request.GET['category'].split(',')
+            products = products.filter(category__name__in=categories)
+            categories = Category.objects.filter(name__in=categories)
 
         if 'q' in request.GET:
             query = request.GET['q']
@@ -73,4 +73,4 @@ def product_details(request, product_id):
         'product': product,
     }
 
-    return render(request, 'products/product_details.html', context)
+    return render(request, 'products/product_detail.html', context)

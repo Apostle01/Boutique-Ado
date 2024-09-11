@@ -145,6 +145,7 @@
 
     // Remove item and reload on click
     $('.remove-item').click(function(e) {
+        e.preventDefault();  // Prevent default link behavior
         var csrfToken = "{{ csrf_token }}";
         var itemId = $(this).attr('id').split('remove_')[1];
         var size = $(this).data('product_size');
@@ -154,7 +155,11 @@
         $.post(url, data)
             .done(function() {
                 location.reload();
-            });
+            })
+            .fail(function() {
+                alert("Error: Could not remove item.");  // Error handling
+        
+        });
     });
 </script>
 {% endblock %}

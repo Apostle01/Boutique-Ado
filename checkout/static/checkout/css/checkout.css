@@ -14,11 +14,13 @@ transition: box-shadow 150ms ease;
 .StripeElement--focus,
 .stripe-style-input:focus,
 .stripe-style-input:active {
-box-shadow: 0 1px 3px 0 #cfd7df;
+box-shadow: 0 2px 5px 0 #cfd7df;
+border-color: #4b9fea; /* Blue border to indicate focus */
 }
 
 .StripeElement--webkit-autofill {
 background-color: #fefde5 !important;
+color: #000 !important;
 }
 
 .stripe-style-input::placeholder {
@@ -35,4 +37,12 @@ background-color: #fefde5 !important;
 #card-element {
     color: #000;
     border: 1px solid #000;
+}
+
+@media (max-width: 576px) {
+    .StripeElement,
+    .stripe-style-input {
+        height: 50px; /* Make input taller for easier tapping */
+        padding: 12px 14px;
+    }
 }

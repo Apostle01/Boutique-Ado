@@ -24,7 +24,7 @@ SECRET_KEY = os.getenv('DJANGO_SECRET_KEY', 'your_default_secret_key_here')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.getenv('DJANGO_DEBUG', 'True') == 'True'
 
-ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', '').split(',')
+ALLOWED_HOSTS = os.getenv('DJANGO_ALLOWED_HOSTS', ['127.0.0.1', 'localhost'])
 
 
 # Application definition
@@ -177,8 +177,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 FREE_DELIVERY_THRESHOLD = 50
 STANDARD_DELIVERY_PERCENTAGE = 10
 STRIPE_CURRENCY = 'usd'
-STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', 'your_default_public_key')
-STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', 'your_default_secret_key')
+STRIPE_PUBLIC_KEY = os.getenv('STRIPE_PUBLIC_KEY', 'pk_test_51Py8shP86GD8AZmK2hvqdfhK2Br41mPOih7riU1mY2qQyn6oklWPEEcuDyitl8enkWJh9SgpdMPtcX9VV7mogg7D00drcK3okc')
+STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY', 'sk_test_51Py8shP86GD8AZmK77A6Px87dufhx72T3fNbbI0V39QQsHzagnRxICB0wBpgSTscq1UYoX75hrnwHz8hdEgz0aMv00nfUi1eCp')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field

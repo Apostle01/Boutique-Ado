@@ -1,7 +1,6 @@
-from django.shortcuts import render, redirect, get_object_or_404 
+from django.shortcuts import render, redirect, reverse, get_object_or_404
 from django.contrib import messages
 from django.conf import settings
-from django.urls import reverse
 
 from .forms import OrderForm
 from .models import Order, OrderLineItem
@@ -15,11 +14,9 @@ def checkout(request):
     stripe_public_key = settings.STRIPE_PUBLIC_KEY
     stripe_secret_key = settings.STRIPE_SECRET_KEY
 
-    # Retrieve the session bag
-    bag = request.session.get('bag', {})
-
-    # If the request is POST, process the order form
     if request.method == 'POST':
+        bag = request.session.get('bag', {})
+
         form_data = {
             'full_name': request.POST['full_name'],
             'email': request.POST['email'],
@@ -31,7 +28,6 @@ def checkout(request):
             'street_address2': request.POST['street_address2'],
             'county': request.POST['county'],
         }
-
         order_form = OrderForm(form_data)
         if order_form.is_valid():
             order = order_form.save()
@@ -68,11 +64,11 @@ def checkout(request):
             messages.error(request, 'There was an error with your form. \
                 Please double check your information.')
     else:
-        if not bag:  # Check if the bag is empty before processing the checkout page
+        bag = request.session.get('bag', {})
+        if not bag:
             messages.error(request, "There's nothing in your bag at the moment")
             return redirect(reverse('products'))
 
-        # Calculate the total and Stripe payment details
         current_bag = bag_contents(request)
         total = current_bag['grand_total']
         stripe_total = round(total * 100)
@@ -96,6 +92,7 @@ def checkout(request):
     }
 
     return render(request, template, context)
+
 
 def checkout_success(request, order_number):
     """

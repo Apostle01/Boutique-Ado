@@ -1,3 +1,5 @@
 from django.db import models
 
-# Create your models here.
+class Kente(models.Model):
+    blackandwhite = models.CharField(max_length=255)
+    Gold = models.CharField(max_length=255)

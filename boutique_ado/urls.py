@@ -1,8 +1,7 @@
-"""
-URL configuration for boutique_ado project.
+"""boutique_ado URL Configuration
 
 The `urlpatterns` list routes URLs to views. For more information please see:
-    https://docs.djangoproject.com/en/5.1/topics/http/urls/
+    https://docs.djangoproject.com/en/3.0/topics/http/urls/
 Examples:
 Function views
     1. Add an import:  from my_app import views
@@ -16,14 +15,13 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from django.conf import settings
-from django.conf.urls.static import static
+from products import views 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('allauth.urls')),
-    path('', include('home.urls')),
-    path('products/', include('products.urls')),
-    path('bag/', include('bag.urls')),
-    path('checkout/', include('checkout.urls')),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('', include('home.urls')),  # Adjust as necessary
+    path('bag', include('bag.urls')),
+    path('products/', include('products.urls')),  # Include the products app
+    # path('', include('boutique_ado.urls')),  # Ensure the app containing view_bag is included
+]

@@ -6,7 +6,7 @@ from products.models import Product #import the Product model
 def view_bag(request):
     """A view that renders the bag contents page."""
     
-    return render(request, 'bag/view_bag.html')
+    return render(request, 'bag/view.html',)
 
 def add_to_bag(request, item_id):
     """

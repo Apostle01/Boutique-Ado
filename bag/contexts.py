@@ -4,16 +4,18 @@ from django.shortcuts import get_object_or_404
 from products.models import Product
 
 def bag_contents(request):
-
     bag_items = []
-    total = 0
+    total = Decimal('0.00')  # Initialize total as Decimal
     product_count = 0
     bag = request.session.get('bag', {})
+    delivery = Decimal('0.00')  # Initialize delivery cost as Decimal
 
     # Calculate total price and product count
-    for item_id, item_data in bag.items():              
+    for item_id, item_data in bag.items():
+        product = get_object_or_404(Product, pk=item_id)  # Get the product once
+
         if isinstance(item_data, int):
-            product = get_object_or_404(Product, pk=item_id)
+            # Single size case
             total += item_data * product.price
             product_count += item_data
             bag_items.append({
@@ -22,7 +24,7 @@ def bag_contents(request):
                 'product': product,
             })
         else:
-            product = get_object_or_404(Product, pk=item_id)
+            # Multiple sizes case
             for size, quantity in item_data.get('items_by_size', {}).items():
                 total += quantity * product.price
                 product_count += quantity
@@ -38,7 +40,6 @@ def bag_contents(request):
         delivery = total * Decimal(settings.STANDARD_DELIVERY_PERCENTAGE / 100)
         free_delivery_delta = settings.FREE_DELIVERY_THRESHOLD - total
     else:
-        delivery = 0
         free_delivery_delta = 0
 
     grand_total = delivery + total

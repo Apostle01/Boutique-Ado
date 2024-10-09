@@ -15,7 +15,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from products import views 
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,5 +24,6 @@ urlpatterns = [
     path('', include('home.urls')),  # Adjust as necessary
     path('bag', include('bag.urls')),
     path('products/', include('products.urls')),  # Include the products app
-    # path('', include('boutique_ado.urls')),  # Ensure the app containing view_bag is included
-]
+    path('checkout/', include('checkout.urls')),
+    path('profiles/', include('profiles.urls')), 
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
